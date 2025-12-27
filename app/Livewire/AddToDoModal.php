@@ -9,9 +9,12 @@ use Livewire\Attributes\On;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Carbon\Carbon;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class AddToDoModal extends Component
 {
+    use AuthorizesRequests;
+
     public $formTitle = '';
     public $mode = '';
 
@@ -44,6 +47,7 @@ class AddToDoModal extends Component
         $this->mode = 'edit';
 
         $toDo = ToDoList::findOrFail($id);
+        $this->authorize('update', $toDo);
 
         $this->toDoId         = $toDo->id;
         $this->activity       = $toDo->activity;
@@ -58,6 +62,7 @@ class AddToDoModal extends Component
         $this->mode = 'finish';
 
         $toDo = ToDoList::findOrFail($id);
+        $this->authorize('finish', $toDo);
 
         $this->toDoId         = $toDo->id;
         $this->activity       = $toDo->activity;

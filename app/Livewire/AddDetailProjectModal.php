@@ -11,9 +11,12 @@ use Livewire\Attributes\On;
 use Livewire\Attributes\Validate;
 use Carbon\Carbon;
 use Livewire\Component;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class AddDetailProjectModal extends Component
 {
+    use AuthorizesRequests;
+
     public $formTitle = '';
     public $mode = '';
     public $users = [];
@@ -59,7 +62,8 @@ class AddDetailProjectModal extends Component
         $this->selectedProjectId = $projectId;
 
         $detailProject = DetailProject::findOrFail($detailId);
-        
+        $this->authorize('update', $detailProject);
+
         $this->detailProjectId = $detailProject->id;
         $this->activity = $detailProject->activity;
         $this->requestDate = $detailProject->request_date;
@@ -80,6 +84,8 @@ class AddDetailProjectModal extends Component
         $this->selectedProjectId = $projectId;
 
         $detailProject = DetailProject::findOrFail($detailId);
+        $this->authorize('finish', $detailProject);
+
         
         $this->detailProjectId = $detailProject->id;
         $this->activity = $detailProject->activity;
@@ -94,14 +100,14 @@ class AddDetailProjectModal extends Component
 
     public function submit() {
         // MUST: user must be logged in
-        if (!auth()->check()) {
-            abort(403, 'You must be logged in.');
-        }
+        // if (!auth()->check()) {
+        //     abort(403, 'You must be logged in.');
+        // }
 
-        // MUST: user must have permission
-        if (!auth()->user()->hasRole('user')) {
-            abort(403, 'Unauthorized.');
-        }
+        // // MUST: user must have permission
+        // if (!auth()->user()->hasRole('user')) {
+        //     abort(403, 'Unauthorized.');
+        // }
         
         $rules = [
             'activity'      => 'required|string|max:500',
@@ -120,6 +126,8 @@ class AddDetailProjectModal extends Component
 
         if ($this->mode == 'add') {
             try {
+                $this->authorize('create', DetailProject::class);
+
                 DetailProject::create([
                     'project_id'    => $this->selectedProjectId,
                     'activity'      => $this->activity,
@@ -149,9 +157,10 @@ class AddDetailProjectModal extends Component
             try {
                 $detailProject = DetailProject::findOrFail($this->detailProjectId);
 
-                if ($detailProject->company_id !== auth()->user()->company_id) {
-                    abort(403, 'Unauthorized access');
-                }
+                // if ($detailProject->company_id !== auth()->user()->company_id) {
+                //     abort(403, 'Unauthorized access');
+                // }
+                $this->authorize('update', $detailProject);
 
                 $detailProject->update([
                     'activity'      => $this->activity,
@@ -180,9 +189,10 @@ class AddDetailProjectModal extends Component
             try {
                 $detailProject = DetailProject::findOrFail($this->detailProjectId);
 
-                if ($detailProject->company_id !== auth()->user()->company_id) {
-                    abort(403, 'Unauthorized access');
-                }
+                // if ($detailProject->company_id !== auth()->user()->company_id) {
+                //     abort(403, 'Unauthorized access');
+                // }
+                $this->authorize('finish', $detailProject);
 
                 $detailProject->update([
                     'is_done'       => true,

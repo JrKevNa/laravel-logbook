@@ -10,9 +10,12 @@ use Livewire\Attributes\On;
 use Livewire\Attributes\Validate;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Component;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class AddUserModal extends Component
 {
+    use AuthorizesRequests;
+
     public $formTitle = '';
     public $mode = '';
 
@@ -50,6 +53,7 @@ class AddUserModal extends Component
         $this->mode = 'edit';
 
         $user = User::findOrFail($id);
+        $this->authorize('update', $user);
 
         $this->userId = $user->id;
         $this->name = $user->name;

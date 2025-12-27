@@ -9,9 +9,12 @@ use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class Profile extends Component
 {
+    use AuthorizesRequests;
+
     public $roles = [];
     public $selectedRole;
 
@@ -33,18 +36,19 @@ class Profile extends Component
     }
 
     public function submit() {
-        // MUST: user must be logged in
-        if (!auth()->check()) {
-            abort(403, 'You must be logged in.');
-        }
+        // // MUST: user must be logged in
+        // if (!auth()->check()) {
+        //     abort(403, 'You must be logged in.');
+        // }
 
-        // MUST: user must have permission
-        if (!auth()->user()->hasRole('user')) {
-            abort(403, 'Unauthorized.');
-        }
+        // // MUST: user must have permission
+        // if (!auth()->user()->hasRole('user')) {
+        //     abort(403, 'Unauthorized.');
+        // }
 
         try {
             $user = User::findOrFail($this->id);
+            $this->authorize('update', $user);
 
             if ($user->id !== auth()->user()->id) {
                 abort(403, 'Unauthorized access');

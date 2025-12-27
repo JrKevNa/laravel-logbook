@@ -24,21 +24,23 @@ class ToDoList extends Component
 
     public function delete($id)
     {
-        // MUST: user must be logged in
-        if (!auth()->check()) {
-            abort(403, 'You must be logged in.');
-        }
+        // // MUST: user must be logged in
+        // if (!auth()->check()) {
+        //     abort(403, 'You must be logged in.');
+        // }
 
-        // MUST: user must have permission
-        if (!auth()->user()->hasRole(['user'])) {
-            abort(403, 'Unauthorized.');
-        }
+        // // MUST: user must have permission
+        // if (!auth()->user()->hasRole(['user'])) {
+        //     abort(403, 'Unauthorized.');
+        // }
 
         try {
             $toDoList = ToDoListModel::where('id', $id)
                 ->where('company_id', auth()->user()->company_id)
                 ->where('created_by', auth()->user()->id)
                 ->firstOrFail(); // aborts if not found
+
+            $this->authorize('delete', $toDoList);
 
             $toDoList->delete();
             $this->dispatch('update-to-do-count');

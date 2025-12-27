@@ -25,22 +25,27 @@ class Projects extends Component
     public function finish($id)
     {
         // MUST: user must be logged in
-        if (!auth()->check()) {
-            abort(403, 'You must be logged in.');
-        }
+        // if (!auth()->check()) {
+        //     abort(403, 'You must be logged in.');
+        // }
 
-        // MUST: user must have permission
-        if (!auth()->user()->hasRole('user')) {
-            abort(403, 'Unauthorized.');
-        }
+        // // MUST: user must have permission
+        // if (!auth()->user()->hasRole('user')) {
+        //     abort(403, 'Unauthorized.');
+        // }
 
         try {
             // Find project that belongs to the same company
             $project = Project::where('id', $id)
                 ->where('company_id', auth()->user()->company_id)
                 ->firstOrFail(); // aborts if not found
+                
+            $this->authorize('finish', $project);
 
-            $project->update(['is_done' => true]);
+            $project->update([
+                'is_done'       => true,
+                'updated_by'    => Auth::id(),
+            ]);
 
             $this->dispatch('swal:modal', [
                 'type' => 'success',
@@ -49,6 +54,8 @@ class Projects extends Component
             ]);
 
             $this->refreshProjects();
+            $this->dispatch('update-project-count');
+
         } catch (\Throwable $e) { 
             $this->dispatch('swal:modal', [
                 'type' => 'error',
@@ -61,20 +68,22 @@ class Projects extends Component
     public function delete($id)
     {
         // MUST: user must be logged in
-        if (!auth()->check()) {
-            abort(403, 'You must be logged in.');
-        }
+        // if (!auth()->check()) {
+        //     abort(403, 'You must be logged in.');
+        // }
 
-        // MUST: user must have permission
-        if (!auth()->user()->hasRole('user')) {
-            abort(403, 'Unauthorized.');
-        }
+        // // MUST: user must have permission
+        // if (!auth()->user()->hasRole('user')) {
+        //     abort(403, 'Unauthorized.');
+        // }
 
         try {
             // Find project that belongs to the same company
             $project = Project::where('id', $id)
                 ->where('company_id', auth()->user()->company_id)
                 ->firstOrFail(); // aborts if not found
+
+            $this->authorize('delete', $project);
 
             $project->delete();
 
