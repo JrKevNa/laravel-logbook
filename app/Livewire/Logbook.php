@@ -7,9 +7,11 @@ use Illuminate\Support\Facades\Auth;
 use Livewire\WithPagination;
 use Livewire\Attributes\On;
 use Livewire\Component;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class Logbook extends Component
 {
+    use AuthorizesRequests;
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
 
@@ -24,21 +26,23 @@ class Logbook extends Component
 
     public function delete($id)
     {
-        // MUST: user must be logged in
-        if (!auth()->check()) {
-            abort(403, 'You must be logged in.');
-        }
+        // // MUST: user must be logged in
+        // if (!auth()->check()) {
+        //     abort(403, 'You must be logged in.');
+        // }
 
-        // MUST: user must have permission
-        if (!auth()->user()->hasRole(['user'])) {
-            abort(403, 'Unauthorized.');
-        }
+        // // MUST: user must have permission
+        // if (!auth()->user()->hasRole(['user'])) {
+        //     abort(403, 'Unauthorized.');
+        // }
 
         try {
             $logbook = LogbookModel::where('id', $id)
                 ->where('company_id', auth()->user()->company_id)
                 ->where('created_by', auth()->user()->id)
                 ->firstOrFail(); // aborts if not found
+
+            $this->authorize('delete', $logbook);
 
             $logbook->delete();
 

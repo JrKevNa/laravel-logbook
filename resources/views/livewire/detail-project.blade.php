@@ -68,7 +68,7 @@
                                 </button>
 
                                 <!-- Delete -->
-                                <button class="btn btn-sm btn-danger" wire:click="delete({{ $project->id }})"
+                                <button class="btn btn-sm btn-danger" wire:click="delete({{ $detailProject->id }})"
                                     wire:confirm="Are you sure you want to delete this project?">
                                     <i class="bi bi-trash"></i>
                                 </button>

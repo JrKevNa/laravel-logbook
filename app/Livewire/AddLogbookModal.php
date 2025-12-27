@@ -8,9 +8,12 @@ use Livewire\Attributes\On;
 use Livewire\Attributes\Validate;
 use Carbon\Carbon;
 use Livewire\Component;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class AddLogbookModal extends Component
 {
+    use AuthorizesRequests;
+
     public $formTitle = '';
     public $mode = '';
 
@@ -48,6 +51,7 @@ class AddLogbookModal extends Component
         $this->mode = 'edit';
 
         $logbook = Logbook::findOrFail($id);
+        $this->authorize('update', $logbook);
 
         $this->logId          = $logbook->id;
         $this->logDate        = $logbook->log_date;
@@ -58,19 +62,21 @@ class AddLogbookModal extends Component
 
     public function submit() {
         // MUST: user must be logged in
-        if (!auth()->check()) {
-            abort(403, 'You must be logged in.');
-        }
+        // if (!auth()->check()) {
+        //     abort(403, 'You must be logged in.');
+        // }
 
-        // MUST: user must have permission
-        if (!auth()->user()->hasRole(['user'])) {
-            abort(403, 'Unauthorized.');
-        }
+        // // MUST: user must have permission
+        // if (!auth()->user()->hasRole(['user'])) {
+        //     abort(403, 'Unauthorized.');
+        // }
 
         $validated=$this->validate();
 
         if ($this->mode == 'add') {
             try {
+                $this->authorize('create', Logbook::class);
+
                 Logbook::create([
                     'log_date'        => $this->logDate,
                     'activity'        => $this->activity,
@@ -100,13 +106,14 @@ class AddLogbookModal extends Component
                     ->where('company_id', Auth::user()->company_id)
                     ->firstOrFail();
 
-                if ($log->company_id !== auth()->user()->company_id) {
-                    abort(403, 'Unauthorized access');
-                }
+                // if ($log->company_id !== auth()->user()->company_id) {
+                //     abort(403, 'Unauthorized access');
+                // }
 
-                if ($log->created_by !== auth()->user()->id) {
-                    abort(403, 'Unauthorized access');
-                }
+                // if ($log->created_by !== auth()->user()->id) {
+                //     abort(403, 'Unauthorized access');
+                // }
+                $this->authorize('update', $log);
 
                 $log->update([
                     'log_date'        => $this->logDate,

@@ -2,10 +2,11 @@
 
 namespace App\Policies;
 
+use App\Models\Logbook;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
-class UserPolicy
+class LogbookPolicy
 {
     /**
      * Determine whether the user can view any models.
@@ -18,10 +19,10 @@ class UserPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, User $model): bool
+    public function view(User $user, Logbook $logbook): bool
     {
         //
-        return $user->company_id === $model->company_id;
+        return $user->id === $logbook->created_by;
     }
 
     /**
@@ -30,35 +31,31 @@ class UserPolicy
     public function create(User $user): bool
     {
         //
-        return $user->hasRole('admin');
+        return $user->hasRole('user');
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, User $model): bool
+    public function update(User $user, Logbook $logbook): bool
     {
-        // Admin can update anyone
-        if ($user->hasRole('admin')) {
-            return true;
-        }
-
-        // Normal user can only update themself
-        return $user->id === $model->id;
+        //
+        return $user->id === $logbook->created_by;
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, User $model): bool
+    public function delete(User $user, Logbook $logbook): bool
     {
         //
+        return $user->id === $logbook->created_by;
     }
 
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, User $model): bool
+    public function restore(User $user, Logbook $logbook): bool
     {
         //
     }
@@ -66,18 +63,8 @@ class UserPolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, User $model): bool
+    public function forceDelete(User $user, Logbook $logbook): bool
     {
         //
-    }
-
-    public function manageUsers(User $user)
-    {
-        return $user->isAdmin();
-    }
-
-    public function filterReportByUser(User $user)
-    {
-        return $user->isAdmin();
     }
 }
