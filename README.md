@@ -1,3 +1,40 @@
+# Logbook Application (Laravel 10)
+
+## About
+This is a **self-contained Laravel 10 application** for a Logbook system.
+
+The project includes:
+- Application logic
+- Database models & migrations
+- Authentication
+- Web and/or API functionality in a single codebase
+
+This repository is an **early-stage project** and is primarily built for learning and portfolio purposes.
+
+---
+
+## Tech Stack
+- **Laravel 10**
+- **PHP 8.2+**
+- **MySQL**
+- Blade
+
+---
+
+## Features
+- User authentication
+- Company-based (tenant) data separation
+- Logbook-style data management
+- Project data management
+- To Do List management
+- CRUD operations
+
+---
+
+## Project Status
+🚧 In development  
+Breaking changes may occur.
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
