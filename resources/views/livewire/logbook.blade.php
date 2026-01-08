@@ -50,7 +50,23 @@
                     <tr>
                         <td>{{ $log->log_date }}</td>
                         <td>{{ $log->creator->name ?? '—' }}</td>
-                        <td>{{ str($log->activity)->limit(80) }}</td>
+                        <td>
+                            @php
+                                $raw = str($log->activity)->limit(200, '…');
+                                $text = e($raw);
+
+                                $text = preg_replace(
+                                    '/(https?:\/\/[^\s<]+)/',
+                                    '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>',
+                                    $text
+                                );
+
+                                $text = nl2br($text);
+                            @endphp
+
+                            {!! $text !!}
+                        </td>
+
                         <td>{{ $log->duration_number }} {{ $log->duration_unit }}</td>
                         <td>
                             <!-- Edit -->

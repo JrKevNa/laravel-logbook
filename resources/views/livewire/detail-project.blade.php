@@ -46,7 +46,22 @@
                             @endif
                         </td>
                         <td>{{ $detailProject->request_date }}</td>
-                        <td>{{ str($detailProject->activity)->limit(70) }}</td>
+                        <td>
+                            @php
+                                $raw = str($detailProject->activity)->limit(200, '…');
+                                $text = e($raw);
+
+                                $text = preg_replace(
+                                    '/(https?:\/\/[^\s<]+)/',
+                                    '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>',
+                                    $text
+                                );
+
+                                $text = nl2br($text);
+                            @endphp
+
+                            {!! $text !!}
+                        </td>
                         <td>{{ $detailProject->requested_by ?? '-' }}</td>
                         <td>{{ $detailProject->worker->name ?? '-' }}</td>
                         <td>

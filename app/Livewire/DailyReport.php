@@ -6,6 +6,8 @@ use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Logbook;
 use Livewire\Component;
+use App\Exports\DailyReportExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class DailyReport extends Component
 {
@@ -119,6 +121,10 @@ class DailyReport extends Component
         })->values()->toArray();
     }
 
+    public function exportLogs()
+    {
+        return Excel::download(new DailyReportExport($this->logsGrouped), 'daily_report.xlsx');
+    }
 
     public function render()
     {

@@ -49,6 +49,22 @@
         </div>
     </div>
 
+    <div class="row mt-3">
+        <div class="col-lg-12">
+            <button
+                class="btn btn-outline-secondary w-100"
+                wire:click="exportLogs"
+            >
+                Export to Excel
+            </button>
+
+            <small class="text-muted d-block mt-1">
+                All durations are exported in minutes.
+            </small>
+        </div>
+    </div>
+
+
     @forelse($logsGrouped as $group)
         {{-- <h5 class="mt-4">{{ $group['date'] }}</h5>
         <ul class="list-group">
@@ -98,7 +114,22 @@
                         @foreach($group['entries'] as $log)
                             <tr>
                                 <td>{{ $log['creator']['name'] ?? 'Unknown' }}</td>
-                                <td>{{ $log['activity'] }}</td>
+                                <td>
+                                    @php
+                                        $raw = str($log['activity'])->limit(200, '…');
+                                        $text = e($raw);
+
+                                        $text = preg_replace(
+                                            '/(https?:\/\/[^\s<]+)/',
+                                            '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>',
+                                            $text
+                                        );
+
+                                        $text = nl2br($text);
+                                    @endphp
+
+                                    {!! $text !!}
+                                </td>
                                 <td>{{ $log['duration_number'] }} {{ $log['duration_unit'] }}</td>
                             </tr>
                         @endforeach

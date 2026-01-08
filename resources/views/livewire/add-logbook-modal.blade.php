@@ -24,7 +24,7 @@
                             <div class="col-lg-6">
                                 <label for="name" class="form-label">Duration</label>
                                 <div>
-                                    <input wire:model="durationNumber" type="number" step="0.01" id="durationNumber"
+                                    <input wire:model="durationNumber" type="number" step="0.01" onkeydown="return !['e','E','+','-'].includes(event.key)" id="durationNumber"
                                         class="form-control @error('durationNumber') is-invalid @enderror" required>
                                     @error('durationNumber')
                                         <span class="text-danger" style="font-size: 11.5px;">{{ $message }}</span>

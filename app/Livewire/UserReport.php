@@ -6,6 +6,8 @@ use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Logbook;
 use Livewire\Component;
+use App\Exports\UserReportExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class UserReport extends Component
 {
@@ -108,6 +110,11 @@ class UserReport extends Component
         $this->endDate = $next->format('Y-m-d');
 
         $this->fetchLogs();
+    }
+
+    public function exportLogs()
+    {
+        return Excel::download(new UserReportExport($this->logsGrouped), 'user_report.xlsx');
     }
 
     public function render()

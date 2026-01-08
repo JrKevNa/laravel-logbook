@@ -51,7 +51,22 @@
                             @endif
                         </td>
                         <td>{{ $toDo->created_at ?? '—' }}</td>
-                        <td>{{ str($toDo->activity)->limit(80) }}</td>
+                        <td>
+                            @php
+                                $raw = str($toDo->activity)->limit(200, '…');
+                                $text = e($raw);
+
+                                $text = preg_replace(
+                                    '/(https?:\/\/[^\s<]+)/',
+                                    '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>',
+                                    $text
+                                );
+
+                                $text = nl2br($text);
+                            @endphp
+
+                            {!! $text !!}
+                        </td>
                         <td>
                             @if($toDo->is_done == false)
                                 <!-- Finish -->

@@ -61,7 +61,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/projects/{id}', DetailProject::class)
         ->name('detail-project');
 
-    Route::get('/daily-report', DailyReport::class)
+    Route::get('/daily-report', [DailyReport::class, 'export'])
         ->name('daily-report');
 
     Route::get('/user-report', UserReport::class)
