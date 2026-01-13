@@ -19,31 +19,54 @@
                             <span class="text-danger" style="font-size: 11.5px;">{{ $message }}</span>
                         @enderror
 
+                        <div class="mt-3">
+                            <label class="form-label">Input Method</label>
+                            <select wire:model.live="inputMode" class="form-select">
+                                <option value="duration">Duration</option>
+                                <option value="time">Start / End Time</option>
+                            </select>
+                        </div>
 
-                        <div class="row mt-3">
-                            <div class="col-lg-6">
-                                <label for="name" class="form-label">Duration</label>
-                                <div>
-                                    <input wire:model="durationNumber" type="number" step="0.01" onkeydown="return !['e','E','+','-'].includes(event.key)" id="durationNumber"
-                                        class="form-control @error('durationNumber') is-invalid @enderror" required>
-                                    @error('durationNumber')
+                        @if ($inputMode === 'duration')
+                            <div class="row mt-3">
+                                <div class="col-lg-6">
+                                    <label for="name" class="form-label">Duration</label>
+                                    <div>
+                                        <input wire:model="durationNumber" type="number" step="0.01" onkeydown="return !['e','E','+','-'].includes(event.key)" id="durationNumber"
+                                            class="form-control @error('durationNumber') is-invalid @enderror" required>
+                                        @error('durationNumber')
+                                            <span class="text-danger" style="font-size: 11.5px;">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <label for="durationUnit" class="form-label">Duration Unit</label>
+                                    <select wire:model.live="durationUnit" id="durationUnit"
+                                        class="form-control @error('durationUnit') is-invalid @enderror" required>
+                                        <option value="minutes">Minutes</option>
+                                        <option value="hours">Hours</option>
+                                        <option value="days">Days</option>
+                                    </select>
+                                    @error('durationUnit')
                                         <span class="text-danger" style="font-size: 11.5px;">{{ $message }}</span>
                                     @enderror
                                 </div>
                             </div>
-                            <div class="col-lg-6">
-                                <label for="durationUnit" class="form-label">Duration Unit</label>
-                                <select wire:model="durationUnit" id="durationUnit"
-                                    class="form-control @error('durationUnit') is-invalid @enderror" required>
-                                    <option value="minutes">Minutes</option>
-                                    <option value="hours">Hours</option>
-                                    <option value="days">Days</option>
-                                </select>
-                                @error('durationUnit')
-                                    <span class="text-danger" style="font-size: 11.5px;">{{ $message }}</span>
-                                @enderror
+                        @endif
+
+                        @if ($inputMode === 'time')
+                            <div class="row mt-3">
+                                <div class="col-lg-6">
+                                    <label class="form-label">Start Time</label>
+                                    <input wire:model="startTime" type="time" class="form-control">
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <label class="form-label">End Time</label>
+                                    <input wire:model="endTime" type="time" class="form-control">
+                                </div>
                             </div>
-                        </div>
+                        @endif
 
                         <label for="activity" class="form-label mt-3">Activity</label>
                         <textarea wire:model="activity" class="form-control @error('activity') is-invalid @enderror" id="activity"

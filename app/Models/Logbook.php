@@ -14,6 +14,8 @@ class Logbook extends Model
         'activity',
         'duration_number',
         'duration_unit',
+        'start_time',
+        'end_time',
         'company_id',
         'created_by',
         'updated_by',
