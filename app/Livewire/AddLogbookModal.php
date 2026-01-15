@@ -99,8 +99,8 @@ class AddLogbookModal extends Component
 
             // dd($logbook->start_time);
 
-            $this->startTime = $logbook->start_time;
-            $this->endTime   = $logbook->end_time;
+            $this->startTime = Carbon::parse($logbook->start_time)->format('H:i');
+            $this->endTime   = Carbon::parse($logbook->end_time)->format('H:i');
 
             // Optional: clear duration fields to avoid stale data
             $this->durationNumber = null;

@@ -58,12 +58,18 @@
                             <div class="row mt-3">
                                 <div class="col-lg-6">
                                     <label class="form-label">Start Time</label>
-                                    <input wire:model="startTime" type="time" class="form-control">
+                                    <input wire:model="startTime" type="time" class="form-control @error('startTime') is-invalid @enderror">
+                                    @error('startTime')
+                                        <span class="text-danger" style="font-size: 11.5px;">{{ $message }}</span>
+                                    @enderror
                                 </div>
 
                                 <div class="col-lg-6">
                                     <label class="form-label">End Time</label>
-                                    <input wire:model="endTime" type="time" class="form-control">
+                                    <input wire:model="endTime" type="time" class="form-control @error('startTime') is-invalid @enderror">
+                                    @error('endTime')
+                                        <span class="text-danger" style="font-size: 11.5px;">{{ $message }}</span>
+                                    @enderror
                                 </div>
                             </div>
                         @endif
@@ -84,7 +90,7 @@
                                 wire:target="submit">
 
                             <span wire:loading.remove wire:target="submit">
-                                Submit
+                                Save
                             </span>
 
                             <span wire:loading wire:target="submit">

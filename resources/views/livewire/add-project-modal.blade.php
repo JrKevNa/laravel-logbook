@@ -104,7 +104,7 @@
                                 wire:target="submit">
 
                             <span wire:loading.remove wire:target="submit">
-                                Submit
+                                Save
                             </span>
 
                             <span wire:loading wire:target="submit">
