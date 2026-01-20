@@ -93,7 +93,7 @@ class Projects extends Component
                 'text' => 'Project has been deleted.'
             ]);
 
-            $this->refreshToDoList();
+            // $this->refreshToDoList();
         } catch (\Throwable $e) { 
             $this->dispatch('swal:modal', [
                 'type' => 'error',
@@ -105,16 +105,22 @@ class Projects extends Component
 
     public function render()
     {
+        $userId = Auth::id();
+
         $projects = Project::withCount([
                 'details as remaining_details_count' => function ($q) {
                     $q->where('is_done', false);
                 }
             ])
-            ->where('company_id', Auth::user()->company_id)
+            ->whereHas('workers', function ($q) use ($userId) {
+                $q->where('users.id', $userId); // only projects where this user is a worker
+            })
+            ->where('company_id', Auth::user()->company_id) // optional, if you also want company filtering
             ->where('name', 'like', '%' . $this->searchTerm . '%')
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 
         return view('livewire.projects', compact('projects'));
     }
+
 }

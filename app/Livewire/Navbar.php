@@ -36,10 +36,16 @@ class Navbar extends Component
     #[On('update-project-count')]
     public function refreshProjectCount()
     {
+        $userId = auth()->id();
+
         $this->projectCount = Project::where('is_done', false)
-            ->where('company_id', auth()->user()->company_id)
+            ->whereHas('workers', function ($q) use ($userId) {
+                $q->where('users.id', $userId); // only projects where current user is a worker
+            })
+            ->where('company_id', auth()->user()->company_id) // optional if you still want to filter by company
             ->count();
     }
+
 
     public function render()
     {

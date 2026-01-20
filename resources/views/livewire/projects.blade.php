@@ -51,7 +51,16 @@
                         <td>{{ $project->start_date ?? '—' }}</td>
                         <td>{{ $project->end_date ?? '—' }}</td>
                         <td>{{ $project->requested_by ?? '-' }}</td>
-                        <td>{{ $project->worker->name ?? '-' }}</td>
+                        <td>
+                            @if ($project->workers->count() === 1)
+                                {{ $project->workers->first()->name ?? '-' }}
+                            @elseif ($project->workers->count() > 1)
+                                {{ $project->workers->count() }} users working
+                            @else
+                                -
+                            @endif
+                        </td>
+
                         <td>
                             @if($project->is_done == false)
                                 <!-- Finish -->

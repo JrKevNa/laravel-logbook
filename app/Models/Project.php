@@ -14,7 +14,7 @@ class Project extends Model
         'start_date',
         'end_date',
         'requested_by',
-        'worked_by',
+        // 'worked_by',
         'note',
         'company_id',
         'is_done',
@@ -27,9 +27,21 @@ class Project extends Model
         return $this->belongsTo(Company::class);
     }
 
-    public function worker()
+    // public function worker()
+    // {
+    //     return $this->belongsTo(User::class, 'worked_by');
+    // }
+
+    // public function workers()
+    // {
+    //     return $this->hasMany(ProjectWorker::class);
+    // }
+    
+    public function workers()
     {
-        return $this->belongsTo(User::class, 'worked_by');
+        return $this->belongsToMany(User::class, 'project_workers', 'project_id', 'user_id')
+                    ->withPivot('company_id')
+                    ->withTimestamps();
     }
 
     public function creator()

@@ -52,7 +52,7 @@
                         <td>{{ $log->creator->name ?? '—' }}</td>
                         <td>
                             @php
-                                $raw = str($log->activity)->limit(200, '…');
+                                $raw = str($log->activity)->limit(80, '…');
                                 $text = e($raw);
 
                                 $text = preg_replace(

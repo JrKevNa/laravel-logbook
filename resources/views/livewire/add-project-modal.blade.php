@@ -22,19 +22,40 @@
                         <div class="row">
                             <div class="col-lg-6">
                                 <label for="name" class="form-label mt-3">Worked By</label>
-                                <select wire:model="workedBy" id="role" class="form-control @error('workedBy') is-invalid @enderror" required>
+                                {{-- <select wire:model="workedBy" id="role" class="form-control @error('workedBy') is-invalid @enderror" required>
                                     <option value="">-- Select User --</option>
                                     @foreach($users as $user)
                                         <option value="{{ $user->id }}">{{ $user->name }}</option>
                                     @endforeach
-                                </select>
+                                </select> --}}
+                                <div>
+                                    @foreach($selections as $index => $selection)
+                                        <div class="d-flex align-items-center mb-2">
+                                            <select wire:model="selections.{{ $index }}" class="form-control me-2">
+                                                <option value="">-- Select User --</option>
+                                                @foreach($users as $user)
+                                                    <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                                @endforeach
+                                            </select>
+                                            @if($index === count($selections) - 1)
+                                                <button type="button" wire:click="addSelection" class="btn btn-success me-1">
+                                                    <i class="bi bi-plus-lg"></i>
+                                                </button>
+                                            @endif
+                                            <button type="button" wire:click="removeSelection({{ $index }})" class="btn btn-danger">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </div>
+                                    @endforeach
+                                </div>
+
                                 @error('workedBy')
                                     <span class="text-danger" style="font-size: 11.5px;">{{ $message }}</span>
                                 @enderror
                             </div>
                             
                             <div class="col-lg-6">
-                                <label for="name" class="form-label mt-3">RequestedBy</label>
+                                <label for="name" class="form-label mt-3">Requested By</label>
                                 <div>
                                     <input wire:model="requestedBy" type="text" step="0.01" id="requestedBy"
                                         class="form-control @error('requestedBy') is-invalid @enderror" required>
