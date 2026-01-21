@@ -52,7 +52,7 @@
                 <p class="text-xs text-slate-500 mt-1">Catat aktivitas harian</p>
             </a>
 
-            <a href="{{ url('projects') }}" class="menu-card bg-white/70 border border-white/50 rounded-2xl p-8 text-center shadow-sm flex flex-col items-center">
+            <a href="{{ route('projects') }}" class="menu-card bg-white/70 border border-white/50 rounded-2xl p-8 text-center shadow-sm flex flex-col items-center">
                 <div class="p-4 bg-gradient-to-br from-orange-400 to-amber-500 rounded-xl shadow-md mb-4">
                     <div data-lucide="briefcase" class="text-white w-10 h-10"></div>
                 </div>
@@ -60,7 +60,7 @@
                 <p class="text-xs text-slate-500 mt-1">Pantau progres proyek</p>
             </a>
 
-            <a href="{{ url('to-do-list') }}" class="menu-card bg-white/70 border border-white/50 rounded-2xl p-8 text-center shadow-sm flex flex-col items-center">
+            <a href="{{ route('to-do-list') }}" class="menu-card bg-white/70 border border-white/50 rounded-2xl p-8 text-center shadow-sm flex flex-col items-center">
                 <div class="p-4 bg-gradient-to-br from-emerald-400 to-teal-500 rounded-xl shadow-md mb-4">
                     <div data-lucide="check-square" class="text-white w-10 h-10"></div>
                 </div>
@@ -68,7 +68,7 @@
                 <p class="text-xs text-slate-500 mt-1">Daftar tugas penting</p>
             </a>
 
-            <a href="{{ url('daftarkan_finger') }}" class="menu-card bg-white/70 border border-white/50 rounded-2xl p-8 text-center shadow-sm flex flex-col items-center">
+            <a href="{{ route('fingerprints') }}" class="menu-card bg-white/70 border border-white/50 rounded-2xl p-8 text-center shadow-sm flex flex-col items-center">
                 <div class="p-4 bg-gradient-to-br from-sky-500 to-indigo-500 rounded-xl shadow-md mb-4">
                     <div data-lucide="fingerprint" class="text-white w-10 h-10"></div>
                 </div>
@@ -76,7 +76,7 @@
                 <p class="text-xs text-slate-500 mt-1">Aktivasi absensi digital</p>
             </a>
 
-            <a href="{{ url('dashboard') }}" class="menu-card bg-white/70 border border-white/50 rounded-2xl p-8 text-center shadow-sm flex flex-col items-center">
+            <a href="{{ route('dashboard') }}" class="menu-card bg-white/70 border border-white/50 rounded-2xl p-8 text-center shadow-sm flex flex-col items-center">
                 <div class="p-4 bg-gradient-to-br from-purple-500 to-fuchsia-500 rounded-xl shadow-md mb-4">
                     <div data-lucide="bar-chart-3" class="text-white w-10 h-10"></div>
                 </div>

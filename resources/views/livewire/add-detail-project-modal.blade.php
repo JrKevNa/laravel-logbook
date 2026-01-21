@@ -18,7 +18,12 @@
                         <div class="row">
                             <div class="col-lg-6">
                                 <label for="name" class="form-label mt-3">Worked By</label>
-                                <select wire:model="workedBy" id="role" class="form-control @error('workedBy') is-invalid @enderror" required>
+                                <select 
+                                    wire:model="workedBy" id="role" 
+                                    class="form-control"
+                                    wire:key="worked-by-select-{{ $selectedProjectId }}-{{ $mode }}
+                                    @error('workedBy') is-invalid @enderror" required
+                                >
                                     <option value="">-- Select User --</option>
                                     @foreach($users as $user)
                                         <option value="{{ $user->id }}">{{ $user->name }}</option>

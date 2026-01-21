@@ -84,11 +84,16 @@ class AddDetailProjectModal extends Component
         $this->detailProjectId = $detailProject->id;
         $this->activity = $detailProject->activity;
         $this->requestDate = $detailProject->request_date;
+
+        // $this->workedBy = $detailProject->worked_by;
+        $this->reset('workedBy');
         $this->workedBy = $this->users
             ->pluck('id')
             ->contains($detailProject->worked_by)
                 ? $detailProject->worked_by
                 : null;
+
+        // dd($this->workedBy);
 
         $this->requestedBy = $detailProject->requested_by;
         $this->note = $detailProject->note;
@@ -112,6 +117,7 @@ class AddDetailProjectModal extends Component
         $this->detailProjectId = $detailProject->id;
         $this->activity = $detailProject->activity;
         $this->requestDate = $detailProject->request_date;
+        $this->reset('workedBy');
         $this->workedBy = $detailProject->worked_by;
         $this->requestedBy = $detailProject->requested_by;
         $this->note = $detailProject->note;

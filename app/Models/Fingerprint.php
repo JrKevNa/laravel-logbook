@@ -5,36 +5,31 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class DetailProject extends Model
+class Fingerprint extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'project_id',
-        'activity',
-        'requested_by',
-        'worked_by',
-        'request_date',
-        'note',
+        'user_id',
         'company_id',
-        'is_done',
+        'enroll_fingerprint',
         'created_by',
-        'updated_by'
+        'updated_by',
     ];
 
-    public function project()
+    protected $casts = [
+        'enroll_fingerprint' => 'boolean',
+    ];
+    
+    // Relations
+    public function user()
     {
-        return $this->belongsTo(Project::class);
+        return $this->belongsTo(User::class);
     }
 
     public function company()
     {
         return $this->belongsTo(Company::class);
-    }
-
-    public function worker()
-    {
-        return $this->belongsTo(User::class, 'worked_by');
     }
 
     public function creator()

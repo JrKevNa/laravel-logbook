@@ -52,6 +52,14 @@
                 })
             })
 
+            document.addEventListener('swal:modal_static', event => {
+                swal({
+                    title: event.detail[0].title,
+                    text: event.detail[0].text,
+                    icon: event.detail[0].type,
+                })
+            })
+
             document.addEventListener('swal:modalReceipt', event => {
                 swal({
                     title: event.detail[0].title,

@@ -40,7 +40,10 @@ class DetailProjectPolicy
     public function update(User $user, DetailProject $detailProject): bool
     {
         //
-        return $user->company_id === $detailProject->company_id;
+        return $detailProject->project
+            ->workers()
+            ->where('users.id', $user->id)
+            ->exists();
     }
 
     /**
@@ -49,7 +52,10 @@ class DetailProjectPolicy
     public function delete(User $user, DetailProject $detailProject): bool
     {
         //
-        return $user->company_id === $detailProject->company_id;
+        return $detailProject->project
+            ->workers()
+            ->where('users.id', $user->id)
+            ->exists();
     }
 
     /**
@@ -57,8 +63,11 @@ class DetailProjectPolicy
      */
     public function finish(User $user, DetailProject $detailProject): bool
     {
-        return $user->company_id === $detailProject->company_id
-            && ! $detailProject->is_done;
+        return ! $detailProject->is_done
+            && $detailProject->project
+                ->workers()
+                ->where('users.id', $user->id)
+                ->exists();
     }
 
     /**

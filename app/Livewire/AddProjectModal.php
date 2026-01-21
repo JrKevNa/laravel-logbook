@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Project;
+use App\Models\DetailProject;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\On;
@@ -185,6 +186,37 @@ class AddProjectModal extends Component
                     ->where('company_id', $project->company_id)
                     ->pluck('id')
                     ->toArray();
+
+                // Existing workers
+                $currentWorkerIds = $project->workers()
+                    ->pluck('users.id')
+                    ->toArray();
+
+                // Workers being removed
+                $removedUserIds = array_diff($currentWorkerIds, $allowedUserIds);
+
+                // Block removal if they have contributed
+                $blockingUserIds = DetailProject::where('project_id', $project->id)
+                    ->whereIn('worked_by', $removedUserIds)
+                    ->distinct()
+                    ->pluck('worked_by')
+                    ->toArray();
+
+                // dd($blockingUserIds);
+
+                if (! empty($blockingUserIds)) {
+                    $blockingNames = User::whereIn('id', $blockingUserIds)
+                        ->pluck('name')
+                        ->implode(', ');
+
+                    $this->dispatch('swal:modal_static', [
+                        'type' => 'error',
+                        'title' => 'Project update failed',
+                        'text' => 'Cannot remove the following workers because they have contributed to this project: '. $blockingNames,
+                    ]);
+
+                    return;
+                }
 
                 // Prepare pivot data
                 $syncData = [];

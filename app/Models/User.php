@@ -69,6 +69,12 @@ class User extends Authenticatable
         return $this->hasMany(DetailProject::class, 'worked_by');
     }
 
+    public function fingerprint()
+    {
+        return $this->hasOne(Fingerprint::class);
+    }
+
+
     public function isAdmin()
     {
         return $this->roles()->where('name', 'admin')->exists();

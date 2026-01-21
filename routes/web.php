@@ -12,6 +12,7 @@ use App\Livewire\Projects;
 use App\Livewire\DetailProject;
 use App\Livewire\DailyReport;
 use App\Livewire\UserReport;
+use App\Livewire\Fingerprints;
 use App\Http\Controllers\Auth\GoogleController;
 /*
 |--------------------------------------------------------------------------
@@ -64,9 +65,13 @@ Route::middleware('auth')->group(function () {
         ->middleware('projectWorker')
         ->name('detail-project');
 
-    Route::get('/daily-report', [DailyReport::class, 'export'])
+    Route::get('/daily-report', DailyReport::class)
         ->name('daily-report');
 
-    Route::get('/user-report', [UserReport::class, 'export'])
+    Route::get('/user-report', UserReport::class)
         ->name('user-report');
+
+    Route::get('/fingerprints', Fingerprints::class)
+        ->middleware('isAdmin')
+        ->name('fingerprints');
 });

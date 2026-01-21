@@ -156,7 +156,15 @@
                 </li>
                 @auth
                     @if(auth()->user()->roles->contains('name', 'admin'))
-                        <li><a href="{{ route('users') }}" class="nav-link px-2">Users</a></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle px-2" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Admin Menu
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{{ route('users') }}">Users</a></li>
+                                <li><a class="dropdown-item" href="{{ route('fingerprints') }}">Fingerprints</a></li>
+                            </ul>
+                        </li>
                     @endif
                 @endauth
 

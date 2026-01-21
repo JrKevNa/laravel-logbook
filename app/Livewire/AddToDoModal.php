@@ -94,6 +94,8 @@ class AddToDoModal extends Component
 
         if ($this->mode == 'add') {
             try {
+                $this->authorize('create', ToDoList::class);
+
                 ToDoList::create([
                     'activity'        => $this->activity,
                     'company_id'      => Auth::user()->company_id,
@@ -121,13 +123,14 @@ class AddToDoModal extends Component
                     ->where('company_id', Auth::user()->company_id)
                     ->firstOrFail();
 
-                if ($toDo->company_id !== auth()->user()->company_id) {
-                    abort(403, 'Unauthorized access');
-                }
+                $this->authorize('update', $toDo);
+                // if ($toDo->company_id !== auth()->user()->company_id) {
+                //     abort(403, 'Unauthorized access');
+                // }
 
-                if ($toDo->created_by !== auth()->user()->id) {
-                    abort(403, 'Unauthorized access');
-                }
+                // if ($toDo->created_by !== auth()->user()->id) {
+                //     abort(403, 'Unauthorized access');
+                // }
 
                 $toDo->update([
                     'activity'        => $this->activity,
@@ -155,13 +158,14 @@ class AddToDoModal extends Component
                     ->where('company_id', Auth::user()->company_id)
                     ->firstOrFail();
 
-                if ($toDo->company_id !== auth()->user()->company_id) {
-                    abort(403, 'Unauthorized access');
-                }
+                $this->authorize('finish', $toDo);
+                // if ($toDo->company_id !== auth()->user()->company_id) {
+                //     abort(403, 'Unauthorized access');
+                // }
 
-                if ($toDo->created_by !== auth()->user()->id) {
-                    abort(403, 'Unauthorized access');
-                }
+                // if ($toDo->created_by !== auth()->user()->id) {
+                //     abort(403, 'Unauthorized access');
+                // }
 
                 $toDo->update([
                     'is_done'        => true,
