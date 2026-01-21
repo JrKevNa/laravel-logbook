@@ -15,6 +15,7 @@ class IsAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
+        dd('is Admin middleware work');
         // must be logged in
         if (!auth()->check()) {
             abort(403, 'Not authenticated.');

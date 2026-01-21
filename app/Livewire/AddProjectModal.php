@@ -33,9 +33,11 @@ class AddProjectModal extends Component
     // #[Validate('required|in:minutes,hours,days')]
     public $durationUnit;
 
-    public function mount() {
-        $this->users = User::all();
+    public function mount()
+    {
+        $this->users = User::where('company_id', auth()->user()->company_id)->get();
     }
+
 
     #[On('add-project')]
     public function add() {

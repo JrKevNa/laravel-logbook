@@ -17,6 +17,12 @@ class Projects extends Component
 
     public $showModal = false;
 
+    public function mount()
+    {
+        logger(static::class . ' mounted');
+    }
+
+
     #[On('refresh-projects')]
     public function refreshProjects() {
         $this->resetPage();

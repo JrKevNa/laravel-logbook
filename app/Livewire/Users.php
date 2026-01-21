@@ -17,6 +17,12 @@ class Users extends Component
 
     public $showModal = false;
 
+    public function mount()
+    {
+        logger(static::class . ' mounted');
+    }
+
+
     #[On('refresh-users')]
     public function refreshUsers() {
         $this->resetPage();

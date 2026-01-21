@@ -33,9 +33,16 @@ class AddDetailProjectModal extends Component
     // public $durationNumber;
     // public $durationUnit;
 
-    public function mount() {
-        $this->users = User::all();
-    }
+    // public function mount() {
+    //     $this->users = User::all();
+    // }
+
+    // public function mount($id)
+    // {
+    //     $project = Project::findOrFail($id);
+
+    //     $this->users = $project->workers()->get();
+    // }
 
     #[On('add-detail-project')]
     public function add($id) {
@@ -45,6 +52,11 @@ class AddDetailProjectModal extends Component
 
         $this->selectedProjectId = $id;
 
+        // Load ONLY users assigned to this project
+        $this->users = Project::findOrFail($id)
+            ->workers()
+            ->get();
+            
         $this->activity = '';
         $this->requestDate = '';
         $this->workedBy = '';
@@ -64,10 +76,20 @@ class AddDetailProjectModal extends Component
         $detailProject = DetailProject::findOrFail($detailId);
         $this->authorize('update', $detailProject);
 
+        // Load ONLY users assigned to this project
+        $this->users = Project::findOrFail($projectId)
+            ->workers()
+            ->get();
+
         $this->detailProjectId = $detailProject->id;
         $this->activity = $detailProject->activity;
         $this->requestDate = $detailProject->request_date;
-        $this->workedBy = $detailProject->worked_by;
+        $this->workedBy = $this->users
+            ->pluck('id')
+            ->contains($detailProject->worked_by)
+                ? $detailProject->worked_by
+                : null;
+
         $this->requestedBy = $detailProject->requested_by;
         $this->note = $detailProject->note;
         // $this->durationNumber = '';

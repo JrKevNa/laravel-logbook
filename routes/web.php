@@ -28,15 +28,17 @@ Route::get('/', function () {
     return redirect()->route('dashboard');
 });
 
-Route::get('/login', Login::class)
-    ->name('login');
+Route::middleware('guest')->group(function () {
+    Route::get('/login', Login::class)
+        ->name('login');
 
-Route::get('/register', Register::class)
-    ->name('register');
+    Route::get('/register', Register::class)
+        ->name('register');
 
-Route::get('login/google', [GoogleController::class, 'redirectToGoogle']);
+    Route::get('login/google', [GoogleController::class, 'redirectToGoogle']);
 
-Route::get('login/google/callback', [GoogleController::class, 'handleGoogleCallback']);
+    Route::get('login/google/callback', [GoogleController::class, 'handleGoogleCallback']);
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', Dashboard::class)
@@ -59,11 +61,12 @@ Route::middleware('auth')->group(function () {
         ->name('projects');
 
     Route::get('/projects/{id}', DetailProject::class)
+        ->middleware('projectWorker')
         ->name('detail-project');
 
     Route::get('/daily-report', [DailyReport::class, 'export'])
         ->name('daily-report');
 
-    Route::get('/user-report', UserReport::class)
+    Route::get('/user-report', [UserReport::class, 'export'])
         ->name('user-report');
 });
