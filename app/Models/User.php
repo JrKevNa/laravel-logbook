@@ -10,6 +10,9 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
+    // NOTE:
+    // Fingerprint records are automatically created via UserObserver
+
     use HasApiTokens, HasFactory, Notifiable;
 
     /**
@@ -67,11 +70,6 @@ class User extends Authenticatable
     public function workingProjectDetails()
     {
         return $this->hasMany(DetailProject::class, 'worked_by');
-    }
-
-    public function fingerprint()
-    {
-        return $this->hasOne(Fingerprint::class);
     }
 
 

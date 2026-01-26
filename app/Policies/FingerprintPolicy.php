@@ -30,6 +30,7 @@ class FingerprintPolicy
     public function create(User $user): bool
     {
         //
+        return $user->hasRole('admin');
     }
 
     /**
@@ -46,6 +47,7 @@ class FingerprintPolicy
     public function delete(User $user, Fingerprint $fingerprint): bool
     {
         //
+        return $user->isAdmin() && $user->company_id === $fingerprint->company_id;
     }
 
     /**

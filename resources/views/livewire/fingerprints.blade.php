@@ -5,7 +5,7 @@
     </div>
 
     <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-5">
             <div class="mb-3">
                 <div class="input-group mb-3">
                     <span class="input-group-text">
@@ -20,7 +20,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-6">
+        <div class="col-lg-5">
             {{-- <label for="fingerprintStatus" class="form-label">Fingerprint Status</label> --}}
             <select
                 wire:model.live="selectedStatus"
@@ -35,6 +35,14 @@
             @error('selectedStatus')
                 <span class="text-danger" style="font-size: 11.5px;">{{ $message }}</span>
             @enderror
+        </div>
+        <div class="col-lg-2">
+            <button
+                wire:click="$dispatch('add-fingerprint')"
+                type="button" class="btn btn-primary w-100"
+                data-bs-toggle="modal" data-bs-target="#addFingerprintModal">
+                Add Fingerprint
+            </button>
         </div>
     </div>
 
@@ -51,8 +59,8 @@
             <tbody>
                 @forelse ($fingerprints as $fingerprint)
                     <tr>
-                        <td>{{ $fingerprint->user->name }}</td>
-                        <td>{{ $fingerprint->user->nik ?? '—' }}</td>
+                        <td>{{ $fingerprint->name }}</td>
+                        <td>{{ $fingerprint->nik ?? '—' }}</td>
                         <td class="text-center">
                             <input
                                 class="form-check-input"
@@ -65,7 +73,7 @@
                             @if ($fingerprint->enroll_fingerprint)
                                 <button
                                     type="button"
-                                    class="btn btn-sm btn-outline-danger"
+                                    class="btn btn-sm btn-outline-danger me-1"
                                     wire:click="deregister({{ $fingerprint->id }})"
                                 >
                                     Deregister
@@ -73,12 +81,26 @@
                             @else
                                 <button
                                     type="button"
-                                    class="btn btn-sm btn-outline-success"
+                                    class="btn btn-sm btn-outline-success me-1"
                                     wire:click="register({{ $fingerprint->id }})"
                                 >
                                     Register
                                 </button>
                             @endif
+                            <button 
+                                class="btn btn-sm btn-primary me-1"
+                                data-bs-toggle="modal" data-bs-target="#addFingerprintModal"
+                                wire:click="$dispatch('edit-fingerprint', { id: {{ $fingerprint->id }} })"
+                            >
+                                <i class="bi bi-pencil-square"></i>
+                            </button>
+                            <button 
+                                class="btn btn-sm btn-danger"
+                                wire:click="delete({{ $fingerprint->id }})"
+                                wire:confirm="Are you sure you want to delete this fingerprint data?"
+                            >
+                                <i class="bi bi-trash"></i>
+                            </button>
                         </td>
                     </tr>
                 @empty
@@ -96,4 +118,5 @@
             {{ $fingerprints->links() }}
         </div>
     </div>
+    <livewire:add-fingerprint-modal />
 </div>

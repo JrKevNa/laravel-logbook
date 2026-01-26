@@ -5,6 +5,7 @@ namespace App\Livewire;
 use Livewire\Component;
 use App\Models\Fingerprint;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\On;
 use Livewire\WithPagination;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
@@ -15,6 +16,11 @@ class Fingerprints extends Component
 
     public $selectedStatus;
     public string $searchTerm = '';
+
+    #[On('refresh-fingerprint')]
+    public function refreshFingerprint() {
+        $this->resetPage();
+    }
 
     public function register(int $fingerprintId): void
     {
@@ -32,7 +38,7 @@ class Fingerprints extends Component
         $this->dispatch('swal:modal', [
             'type' => 'success',
             'title' => 'Fingerprint registered',
-            'text' => $fingerprint->user->name . ' is now registered.',
+            'text' => $fingerprint->name . ' is now registered.',
         ]);
     }
 
@@ -52,19 +58,43 @@ class Fingerprints extends Component
         $this->dispatch('swal:modal', [
             'type' => 'success',
             'title' => 'Fingerprint deregistered',
-            'text' => $fingerprint->user->name . ' is now deregistered.',
+            'text' => $fingerprint->name . ' is now deregistered.',
         ]);
     }
 
+    public function delete($id)
+    {
+        try {
+            $fingerprint = Fingerprint::where('id', $id)
+                ->where('company_id', auth()->user()->company_id)
+                ->firstOrFail(); // aborts if not found
+
+            $this->authorize('delete', $fingerprint);
+
+            $fingerprint->delete();
+
+            $this->dispatch('swal:modal', [
+                'type' => 'success',
+                'title' => 'Deleted!',
+                'text' => 'Fingerprint has been deleted.'
+            ]);
+
+            $this->refreshFingerprint();
+        } catch (\Throwable $e) { 
+            $this->dispatch('swal:modal', [
+                'type' => 'error',
+                'title' => 'Error',
+                'text' => $e->getMessage(),
+            ]);
+        };
+    }
+    
     public function render()
     {
-        $fingerprints = Fingerprint::with('user')
-            ->where('company_id', auth()->user()->company_id)
-            ->whereHas('user', function ($q) {
-                $q->where(function ($q) {
-                    $q->where('name', 'like', '%' . $this->searchTerm . '%')
-                    ->orWhere('nik', 'like', '%' . $this->searchTerm . '%');
-                });
+        $fingerprints = Fingerprint::where('company_id', auth()->user()->company_id)
+            ->where(function ($q) {
+                $q->where('name', 'like', '%' . $this->searchTerm . '%')
+                ->orWhere('nik', 'like', '%' . $this->searchTerm . '%');
             })
             ->when($this->selectedStatus === 'registered', function ($q) {
                 $q->where('enroll_fingerprint', true);
@@ -76,6 +106,8 @@ class Fingerprints extends Component
             ->orderByDesc('created_at')     // latest first
             ->paginate(10);
 
+
+        // dd($fingerprints);
 
         return view('livewire.fingerprints', [
             'fingerprints' => $fingerprints,
