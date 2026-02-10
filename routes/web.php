@@ -55,7 +55,7 @@ Route::middleware('auth')->group(function () {
         ->name('to-do-list');
 
     Route::get('/users', Users::class)
-        ->middleware('isAdmin')
+        ->middleware('role:admin')
         ->name('users');
 
     Route::get('/projects', Projects::class)
@@ -72,6 +72,6 @@ Route::middleware('auth')->group(function () {
         ->name('user-report');
 
     Route::get('/fingerprints', Fingerprints::class)
-        ->middleware('isAdmin')
+        ->middleware('role:sdm')
         ->name('fingerprints');
 });

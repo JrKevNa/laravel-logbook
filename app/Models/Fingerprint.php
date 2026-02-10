@@ -13,7 +13,12 @@ class Fingerprint extends Model
         'name',
         'nik',
         'company_id',
+        'upload_user_info_to_machine',
         'enroll_fingerprint',
+        'download_user_info_to_program',
+        'upload_user_info_to_all_machine',
+        'give_password',
+        'note',
         'created_by',
         'updated_by',
     ];

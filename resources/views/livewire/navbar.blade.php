@@ -108,7 +108,8 @@
         <header
             class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom"
         >
-            <div class="col-md-3 mb-2 mb-md-0">
+            {{-- <div class="col-md-3 mb-2 mb-md-0"> --}}
+            <div class="col-md-1 mb-2 mb-md-0">
                 <a
                     href="/dashboard"
                     class="d-inline-flex link-body-emphasis text-decoration-none"
@@ -155,21 +156,32 @@
                     </ul>
                 </li>
                 @auth
-                    @if(auth()->user()->roles->contains('name', 'admin'))
+                    @can('access-sdm-menu')
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle px-2" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                SDM Menu
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{{ route('fingerprints') }}">Fingerprints</a></li>
+                            </ul>
+                        </li>
+                    @endcan
+                @endauth
+                @auth
+                    @can('access-admin-menu')
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle px-2" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Admin Menu
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="{{ route('users') }}">Users</a></li>
-                                <li><a class="dropdown-item" href="{{ route('fingerprints') }}">Fingerprints</a></li>
+                                {{-- <li><a class="dropdown-item" href="{{ route('fingerprints') }}">Fingerprints</a></li> --}}
                             </ul>
                         </li>
-                    @endif
+                    @endcan
                 @endauth
-
             </ul>
-            <div class="col-md-3 text-end">
+            <div class="col-md-1 text-end">
                 @auth
                     <div class="dropdown">
                         <button class="btn btn-outline-primary dropdown-toggle d-flex align-items-center gap-2 ms-auto"

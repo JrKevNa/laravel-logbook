@@ -52,7 +52,12 @@
                 <tr>
                     <th>Username</th>
                     <th>NIK</th>
+                    <th class="text-center">Upload user info to machine</th>
                     <th class="text-center">Enroll Fingerprint</th>
+                    <th class="text-center">Download user info to program</th>
+                    <th class="text-center">Upload user to all machine</th>
+                    <th class="text-center">Give Password</th>
+                    <th>Note</th>
                     <th class="text-center">Action</th>
                 </tr>
             </thead>
@@ -62,33 +67,64 @@
                         <td>{{ $fingerprint->name }}</td>
                         <td>{{ $fingerprint->nik ?? '—' }}</td>
                         <td class="text-center">
+                            <!-- Upload user info to machine -->
                             <input
-                                class="form-check-input"
                                 type="checkbox"
-                                disabled
+                                wire:click="toggleUpdate({{ $fingerprint->id }}, 'upload_user_info_to_machine')"
+                                {{ $fingerprint->upload_user_info_to_machine ? 'checked' : '' }}
+                            >
+                        </td>
+                        <td class="text-center">
+                            <!-- Enroll fingerprint -->
+                            <input
+                                type="checkbox"
+                                wire:click="toggleUpdate({{ $fingerprint->id }}, 'enroll_fingerprint')"
                                 {{ $fingerprint->enroll_fingerprint ? 'checked' : '' }}
                             >
                         </td>
                         <td class="text-center">
-                            @if ($fingerprint->enroll_fingerprint)
-                                <button
-                                    type="button"
-                                    class="btn btn-sm btn-outline-danger me-1"
-                                    wire:click="deregister({{ $fingerprint->id }})"
-                                >
-                                    Deregister
-                                </button>
-                            @else
-                                <button
-                                    type="button"
-                                    class="btn btn-sm btn-outline-success me-1"
-                                    wire:click="register({{ $fingerprint->id }})"
-                                >
-                                    Register
-                                </button>
-                            @endif
+                            <!-- Download user info to program -->
+                            <input
+                                type="checkbox"
+                                wire:click="toggleUpdate({{ $fingerprint->id }}, 'download_user_info_to_program')"
+                                {{ $fingerprint->download_user_info_to_program ? 'checked' : '' }}
+                            >
+                        </td>
+                        <td class="text-center">
+                            <!-- Upload user info to all machines -->
+                            <input
+                                type="checkbox"
+                                wire:click="toggleUpdate({{ $fingerprint->id }}, 'upload_user_info_to_all_machine')"
+                                {{ $fingerprint->upload_user_info_to_all_machine ? 'checked' : '' }}
+                            >
+                        </td>
+                        <td class="text-center">
+                            <!-- Give Password -->
+                            <input
+                                type="checkbox"
+                                wire:click="toggleUpdate({{ $fingerprint->id }}, 'give_password')"
+                                {{ $fingerprint->give_password ? 'checked' : '' }}
+                            >
+                        </td>
+                        <td>
+                            @php
+                                $raw = str($fingerprint->note)->limit(80, '…');
+                                $text = e($raw);
+
+                                $text = preg_replace(
+                                    '/(https?:\/\/[^\s<]+)/',
+                                    '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>',
+                                    $text
+                                );
+
+                                $text = nl2br($text);
+                            @endphp
+
+                            {!! $text !!}
+                        </td>
+                        <td class="text-center">
                             <button 
-                                class="btn btn-sm btn-primary me-1"
+                                class="btn btn-sm btn-primary"
                                 data-bs-toggle="modal" data-bs-target="#addFingerprintModal"
                                 wire:click="$dispatch('edit-fingerprint', { id: {{ $fingerprint->id }} })"
                             >
@@ -105,12 +141,13 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="4" class="text-center text-muted py-3">
+                        <td colspan="9" class="text-center text-muted py-3">
                             No fingerprint entries found.
                         </td>
                     </tr>
                 @endforelse
             </tbody>
+
         </table>
 
         <!-- Pagination -->

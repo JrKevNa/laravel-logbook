@@ -19,6 +19,7 @@ class AddFingerprintModal extends Component
     public $fingerId;
     public $name;
     public $nik;
+    public $note;
 
     #[On('add-fingerprint')]
     public function add() {
@@ -28,6 +29,7 @@ class AddFingerprintModal extends Component
 
         $this->name = '';
         $this->nik = '';
+        $this->note = '';
     }
 
     #[On('edit-fingerprint')]
@@ -42,6 +44,7 @@ class AddFingerprintModal extends Component
         $this->fingerId = $fingerprint->id;
         $this->name = $fingerprint->name;
         $this->nik = $fingerprint->nik;
+        $this->note = $fingerprint->note;
     }
 
     public function submit() {
@@ -59,6 +62,7 @@ class AddFingerprintModal extends Component
             $fingerprint = Fingerprint::create([
                 'name'       => $this->name,
                 'nik'        => $this->nik,
+                'note'       => $this->note,
                 'company_id' => Auth::user()->company_id,
                 'created_by' => Auth::id(),
             ]);
@@ -75,8 +79,9 @@ class AddFingerprintModal extends Component
             $this->authorize('update', $fingerprint);
 
             $fingerprint->update([
-                'name'  => $this->name,
-                'nik'   => $this->nik,
+                'name'       => $this->name,
+                'nik'        => $this->nik,
+                'note'       => $this->note,
                 'updated_by' => Auth::id(),
             ]);
 

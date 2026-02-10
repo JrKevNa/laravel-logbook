@@ -22,45 +22,35 @@ class Fingerprints extends Component
         $this->resetPage();
     }
 
-    public function register(int $fingerprintId): void
+    public function toggleUpdate($id, $field)
     {
-        $fingerprint = Fingerprint::where('id', $fingerprintId)
+        $fingerprint = Fingerprint::where('id', $id)
             ->where('company_id', auth()->user()->company_id)
             ->firstOrFail();
 
         $this->authorize('update', $fingerprint);
 
-        $fingerprint->update([
-            'enroll_fingerprint' => true,
-            'updated_by' => auth()->id(),
-        ]);
+        // Toggle the value
+        $fingerprint->$field = !$fingerprint->$field;
+        $fingerprint->updated_by = auth()->id();
+        $fingerprint->save();
 
-        $this->dispatch('swal:modal', [
-            'type' => 'success',
-            'title' => 'Fingerprint registered',
-            'text' => $fingerprint->name . ' is now registered.',
-        ]);
+        // Dynamic success message
+        $friendlyNames = [
+            'enroll_fingerprint' => 'Fingerprint enrollment',
+            'upload_user_info_to_machine' => 'Upload to machine',
+            'download_user_info_to_program' => 'Download to program',
+            'upload_user_info_to_all_machine' => 'Upload to all machines',
+            'give_password' => 'Give Password'
+        ];
+
+        // $this->dispatch('swal:modal', [
+        //     'type' => 'success',
+        //     'title' => $friendlyNames[$field] . ($fingerprint->$field ? ' enabled' : ' disabled'),
+        //     'text' => $fingerprint->name,
+        // ]);
     }
 
-    public function deregister(int $fingerprintId): void
-    {
-        $fingerprint = Fingerprint::where('id', $fingerprintId)
-            ->where('company_id', auth()->user()->company_id)
-            ->firstOrFail();
-
-        $this->authorize('update', $fingerprint);
-
-        $fingerprint->update([
-            'enroll_fingerprint' => false,
-            'updated_by' => auth()->id(),
-        ]);
-
-        $this->dispatch('swal:modal', [
-            'type' => 'success',
-            'title' => 'Fingerprint deregistered',
-            'text' => $fingerprint->name . ' is now deregistered.',
-        ]);
-    }
 
     public function delete($id)
     {
@@ -102,7 +92,7 @@ class Fingerprints extends Component
             ->when($this->selectedStatus === 'not_registered', function ($q) {
                 $q->where('enroll_fingerprint', false);
             })
-            ->orderBy('enroll_fingerprint') // false (0) first = NOT registered
+            // ->orderBy('enroll_fingerprint') // false (0) first = NOT registered
             ->orderByDesc('created_at')     // latest first
             ->paginate(10);
 

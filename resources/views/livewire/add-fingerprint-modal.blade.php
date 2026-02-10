@@ -24,6 +24,11 @@
                         @error('nik')
                             <span class="text-danger" style="font-size: 11.5px;">{{ $message }}</span>
                         @enderror
+
+                        <label for="note" class="form-label mt-3">Note</label>
+                        <textarea wire:model="note" class="form-control @error('note') is-invalid @enderror" id="activity"
+                            rows="3">
+                        </textarea>
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-primary"
