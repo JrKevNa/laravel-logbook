@@ -13,6 +13,10 @@ use App\Livewire\DetailProject;
 use App\Livewire\DailyReport;
 use App\Livewire\UserReport;
 use App\Livewire\Fingerprints;
+use App\Livewire\InvoiceCreator;
+use App\Livewire\InvoiceList;
+use App\Livewire\Company;
+use App\Livewire\InvoiceTemplate;
 use App\Http\Controllers\Auth\GoogleController;
 /*
 |--------------------------------------------------------------------------
@@ -74,4 +78,25 @@ Route::middleware('auth')->group(function () {
     Route::get('/fingerprints', Fingerprints::class)
         ->middleware('role:sdm')
         ->name('fingerprints');
+
+    Route::get('/invoice/{invoice?}', InvoiceCreator::class)
+        ->middleware('role:finance')
+        ->name('invoice-creator');
+
+    Route::get('/invoice-list', InvoiceList::class)
+        ->middleware('role:finance')
+        ->name('invoice-list');
+
+    Route::get('/invoice-print', function () {
+        return view('print.invoice', session('invoice_data'));
+    })->middleware('role:finance')
+        ->name('invoice.print');
+
+    Route::get('/invoice-template', InvoiceTemplate::class)
+        ->middleware('role:finance')
+        ->name('invoice-template');
+
+    Route::get('/company', Company::class)
+        ->middleware('role:admin')
+        ->name('company');
 });

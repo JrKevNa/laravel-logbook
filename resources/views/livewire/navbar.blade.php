@@ -109,7 +109,7 @@
             class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom"
         >
             {{-- <div class="col-md-3 mb-2 mb-md-0"> --}}
-            <div class="col-md-1 mb-2 mb-md-0">
+            <div class="col-md-2 mb-2 mb-md-0">
                 <a
                     href="/dashboard"
                     class="d-inline-flex link-body-emphasis text-decoration-none"
@@ -120,11 +120,11 @@
             <ul
                 class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0"
             >
-                <li>
+                {{-- <li>
                     <a href="/dashboard" class="nav-link px-2"
                         >Dashboard</a
                     >
-                </li>
+                </li> --}}
                 <li class="nav-item position-relative">
                     <a href="{{ route('projects') }}" class="nav-link px-2">
                         Project
@@ -156,6 +156,19 @@
                     </ul>
                 </li>
                 @auth
+                    @can('access-finance-menu')
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle px-2" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Invoice
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{{ route('invoice-creator') }}">Invoice Creator</a></li>
+                                <li><a class="dropdown-item" href="{{ route('invoice-list') }}">Invoice List</a></li>
+                            </ul>
+                        </li>
+                    @endcan
+                @endauth
+                @auth
                     @can('access-sdm-menu')
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle px-2" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -175,13 +188,15 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="{{ route('users') }}">Users</a></li>
-                                {{-- <li><a class="dropdown-item" href="{{ route('fingerprints') }}">Fingerprints</a></li> --}}
+                                <li><a class="dropdown-item" href="{{ route('invoice-template') }}">Invoice Template</a></li>
+                                <li><a class="dropdown-item" href="{{ route('company') }}">Company</a></li>
                             </ul>
                         </li>
                     @endcan
                 @endauth
             </ul>
-            <div class="col-md-1 text-end">
+            {{-- <div class="col-md-1 text-end"> --}}
+            <div class="col-md-2">
                 @auth
                     <div class="dropdown">
                         <button class="btn btn-outline-primary dropdown-toggle d-flex align-items-center gap-2 ms-auto"

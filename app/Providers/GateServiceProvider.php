@@ -23,5 +23,6 @@ class GateServiceProvider extends ServiceProvider
         // SDM menu access
         Gate::define('access-sdm-menu', fn($user) => $user->hasRole('sdm') || $user->hasRole('admin'));
         Gate::define('access-admin-menu', fn($user) => $user->hasRole('admin'));
+        Gate::define('access-finance-menu', fn($user) => $user->hasRole('finance'));
     }
 }

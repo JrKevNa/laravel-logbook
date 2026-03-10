@@ -20,6 +20,12 @@ class RoleSeeder extends Seeder
             [
                 'name' => 'user',
             ],
+            [
+                'name' => 'sdm',
+            ],
+            [
+                'name' => 'finance',
+            ],
         ]);
     }
 }

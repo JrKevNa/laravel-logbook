@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\User;
 use App\Models\UserRole;
 use App\Models\Company;
+use App\Models\InvoiceTemplate;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Component;
@@ -48,6 +49,29 @@ class Register extends Component
             UserRole::create([
                 'user_id' => $user->id,
                 'role_id' => 1, // Hardcoded admin
+            ]);
+
+            // 5. Create Invoice Template
+            InvoiceTemplate::create([
+                'company_id' => $company->id,
+                'header' => $user->name,
+                'name' => 'Your Name',
+                'position' => 'Director',
+                'sections' => json_encode([
+                    [
+                        'label' => 'To',
+                        'value' => '',
+                    ],
+                    [
+                        'label' => 'For Payment',
+                        'value' => '',
+                    ],
+                    [
+                        'label' => 'Payment Type',
+                        'value' => '',
+                    ],
+                ]),
+                'note' => 'Thank you',
             ]);
 
             // Optional redirect

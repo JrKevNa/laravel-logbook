@@ -100,6 +100,10 @@ class AddUserModal extends Component
         } else if ($this->mode == 'edit') {
             $user = User::findOrFail($this->userId);
 
+            if ($user->id === auth()->id()) {
+                abort(403, 'You cannot modify your own role.');
+            }
+
             $user->update([
                 'name'  => $this->name,
                 'nik'   => $this->nik,

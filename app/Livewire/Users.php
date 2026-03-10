@@ -31,7 +31,8 @@ class Users extends Component
     public function render()
     {
         $users = UserModel::where('company_id', Auth::user()->company_id)
-            ->where(function($query) {
+            ->where('id', '!=', Auth::id()) // exclude yourself
+            ->where(function ($query) {
                 $query->where('name', 'like', '%' . $this->searchTerm . '%')
                     ->orWhere('email', 'like', '%' . $this->searchTerm . '%');
             })
@@ -42,5 +43,4 @@ class Users extends Component
             'users' => $users,
         ]);
     }
-
 }

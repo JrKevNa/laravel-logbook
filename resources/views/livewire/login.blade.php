@@ -93,9 +93,9 @@
                     </span>
 
                 </button> --}}
-                <p class="text-justify">
+                {{-- <p class="text-justify">
                     Login with your google account that have (@bpkpenaburjakarta.or.id) or (@tirtamartha.sch.id) to continue to dashboard page
-                </p>
+                </p> --}}
                 
                 {{-- Show Google login error banner --}}
                 @if ($errors->has('google_login'))
