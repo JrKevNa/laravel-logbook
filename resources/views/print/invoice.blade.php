@@ -33,49 +33,56 @@
     <table width="100%" class="mb-3">
         <tr>
             <td width="50%" valign="top">
-                <p>{!! format_inline($header) !!}</p>
+                <p class="fs-6">{!! format_inline($header) !!}</p>
             </td>
 
             <td width="50%" valign="top" halign="right">
-                <p>{!! format_inline($documentNumber) !!}</p>
+                <p class="fs-6">{!! format_inline($documentNumber) !!}</p>
             </td>
         </tr>
     </table>
 
-    <h2 class="text-center">{!! format_inline($title) !!}</h2>
+    <div class="mb-3">
+        <h2 class="text-center">{!! format_inline($title) !!}</h2>
+    </div>
 
-    <table width="100%" class="mb-3">
+    <table width="100%" class="fs-6 mb-3">
         @foreach ($sections as $section)
             <tr>
-                <td width="30%" valign="top">
-                    <p>{!! format_inline($section['label']) !!}:</p>
+                <!-- Label cell, right-aligned -->
+                <td width="20%" valign="top" style="padding-right: 5px;">
+                    {!! format_inline($section['label']) !!}
                 </td>
 
-                <td width="70%" valign="top">
-                    <p>{!! format_inline($section['value']) !!}</p>
+                <!-- Colon cell -->
+                <td width="1%" valign="top">
+                    :
+                </td>
+
+                <!-- Value cell -->
+                <td width="79%" valign="top">
+                    {!! format_inline($section['value']) !!}
                 </td>
             </tr>
         @endforeach
     </table>
 
-    <table width="100%" class="mb-3">
+    <table width="100%" class="fs-6 mb-3">
         <tr>
-            <td width="50%" valign="middle" halign="center">
+            <td width="50%" valign="middle" align="center">
                 {{ $totalWithCurrencyLabel }}
                 <div
                     style="
-                        display: inline-block;
+                        display: inline-block;   /* shrink to content */
                         border: 2px solid #000;
                         padding: 5px 10px;
                         font-weight: bold;
-                        min-width: 250px;
                         text-align: center;
                     "
                 >
                     <strong>{{ number_format($amount, 0, ',', '.') }}</strong>
                 </div>
             </td>
-
 
             <td width="50%" valign="top" halign="center">
                 <p class="text-center">{!! format_inline($city) !!}, {!! format_inline($dayDate) !!}</p>
@@ -92,7 +99,7 @@
         </tr>
     </table>
 
-    <p>{!! format_inline($note) !!}</p>
+    <p class="fs-6">{!! format_inline($note) !!}</p>
 
 </body>
 </html>

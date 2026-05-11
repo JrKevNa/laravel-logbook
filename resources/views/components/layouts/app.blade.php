@@ -62,28 +62,6 @@
                     icon: event.detail[0].type,
                 })
             })
-
-            document.addEventListener('swal:modalReceipt', event => {
-                swal({
-                    title: event.detail[0].title,
-                    text: event.detail[0].text,
-                    icon: event.detail[0].type,
-                    buttons: {
-                        cancel: "Tutup",
-                        printReceipt: {
-                            text: "Print Struk",
-                            value: "print-receipt",
-                            visible: true,
-                            className: "btn-primary",
-                            closeModal: true
-                        }
-                    }
-                }).then((value) => {
-                    if (value === "print-receipt") {
-                        window.location.href = '{{ url('receipt') }}'; // Replace 'receipt' with your actual route
-                    }
-                });
-            })
         </script>
     </body>
 </html>
